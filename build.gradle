@@ -59,6 +59,7 @@ dependencies {
     compile 'io.javalin:javalin:1.4.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile 'org.slf4j:slf4j-simple:1.7.25'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
 
     testCompile "org.jetbrains.kotlin:kotlin-reflect"
     testCompile 'org.assertj:assertj-core:3.9.0'

@@ -3,6 +3,7 @@ package io.sylvanlibrary.api
 import io.javalin.ApiBuilder.get
 import io.javalin.ApiBuilder.path
 import io.javalin.Javalin
+import io.sylvanlibrary.api.controllers.BlocksController
 
 fun main(args: Array<String>) {
   val app = Javalin.create().apply {
@@ -18,7 +19,7 @@ fun main(args: Array<String>) {
 
     path("blocks") {
       get("/") { ctx ->
-        ctx.result("all blocks!")
+        ctx.json(BlocksController().all())
       }
 
       get(":id") { ctx ->
