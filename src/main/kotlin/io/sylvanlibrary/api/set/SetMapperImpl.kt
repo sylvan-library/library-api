@@ -9,30 +9,32 @@ import org.jdbi.v3.core.statement.StatementContext
 import java.sql.ResultSet
 import java.util.*
 
-class SetDaoImpl(private val config: Config, private val connectionPool: Jdbi) : SetDao {
+class SetMapperImpl(private val config: Config, private val connectionPool: Jdbi) : SetMapper {
   companion object {
     const val URL_TEMPLATE = "https://sylvan-library.s3.amazonaws.com/sets"
   }
 
-  private class SetRowMapper : RowMapper<DbSet> {
-    override fun map(rs: ResultSet?, ctx: StatementContext?): DbSet {
-      return DbSet(
-          rs!!.getInt("id"),
-          rs.getInt("block_id"),
+  private inner class SetRowMapper : RowMapper<Set> {
+    override fun map(rs: ResultSet?, ctx: StatementContext?): Set {
+      val abbreviation = rs!!.getString("abbreviation")
+
+      return Set(
+          rs.getInt("id"),
           rs.getString("name"),
-          rs.getString("abbreviation"),
+          getCanonicalUrl(abbreviation),
+          abbreviation,
+          rs.getString("block_name"),
           Optional.ofNullable(rs.getString("icon")).map { "$URL_TEMPLATE/$it" },
           Optional.ofNullable(rs.getString("logo")).map { "$URL_TEMPLATE/$it" },
-          Optional.ofNullable(rs.getDate("release_date").toLocalDate()),
-          rs.getTimestamp("created").toLocalDateTime()
+          rs.getDate("release_date").toLocalDate()
       )
     }
   }
 
-  override fun all(): List<DbSet> {
-    return connectionPool.withHandle<List<DbSet>, RuntimeException> {
-      it.createQuery("select * from sets")
-          .map<DbSet>(SetRowMapper())
+  override fun all(): List<Set> {
+    return connectionPool.withHandle<List<Set>, RuntimeException> {
+      it.createQuery("select b.name as block_name, s.* from sets as s join blocks as b on s.block_id = b.id")
+          .map(SetRowMapper())
           .toList()
     }
   }
@@ -51,13 +53,24 @@ class SetDaoImpl(private val config: Config, private val connectionPool: Jdbi) :
           it.value.map { row ->
             ResourceReference(
                 row["name"] as String,
-                buildCanonicalUrl(row["abbreviation"] as String)
+                getCanonicalUrl(row["abbreviation"] as String)
             )
           }
         }
   }
 
-  private fun buildCanonicalUrl(abbreviation: String): String {
+  override fun get(abbreviation: String): Optional<Set> {
+    val format = connectionPool.withHandle<Optional<Set>, RuntimeException> {
+      it.createQuery("select b.name as block_name, s.* from sets as s join blocks as b on s.block_id = b.id where lower(abbreviation) = :abbreviation")
+          .bind("abbreviation", abbreviation.toLowerCase())
+          .map(SetRowMapper())
+          .findFirst()
+    }
+
+    return format
+  }
+
+  private fun getCanonicalUrl(abbreviation: String): String {
     return "${config.host}/${Paths.Sets.ROOT}/${abbreviation.toLowerCase()}"
   }
 }
