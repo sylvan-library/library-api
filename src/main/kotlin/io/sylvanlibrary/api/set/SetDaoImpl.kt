@@ -1,5 +1,6 @@
 package io.sylvanlibrary.api.set
 
+import io.sylvanlibrary.api.util.Config
 import io.sylvanlibrary.api.util.Paths
 import io.sylvanlibrary.api.util.ResourceReference
 import org.jdbi.v3.core.Jdbi
@@ -8,7 +9,7 @@ import org.jdbi.v3.core.statement.StatementContext
 import java.sql.ResultSet
 import java.util.*
 
-class SetDaoImpl(private val connectionPool: Jdbi) : SetDao {
+class SetDaoImpl(private val config: Config, private val connectionPool: Jdbi) : SetDao {
   companion object {
     const val URL_TEMPLATE = "https://sylvan-library.s3.amazonaws.com/sets"
   }
@@ -57,6 +58,6 @@ class SetDaoImpl(private val connectionPool: Jdbi) : SetDao {
   }
 
   private fun buildCanonicalUrl(abbreviation: String): String {
-    return "${Paths.ROOT}/${Paths.Sets.ROOT}/${abbreviation.toLowerCase()}"
+    return "${config.host}/${Paths.Sets.ROOT}/${abbreviation.toLowerCase()}"
   }
 }

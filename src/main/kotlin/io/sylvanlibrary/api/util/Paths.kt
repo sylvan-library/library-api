@@ -2,7 +2,6 @@ package io.sylvanlibrary.api.util
 
 class Paths {
   companion object {
-    const val ROOT = "https://api.sylvanlibrary.io/v1"
     const val INDEX = "/"
   }
 

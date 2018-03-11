@@ -17,9 +17,9 @@ import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.postgres.PostgresPlugin
 
 val mainModule = Kodein.Module {
-  bind<FormatService>() with singleton { FormatServiceImpl(instance(), instance()) }
+  bind<FormatService>() with singleton { FormatServiceImpl(instance(), instance(), instance()) }
   bind<FormatDao>() with singleton { FormatDaoImpl(instance()) }
-  bind<SetDao>() with singleton { SetDaoImpl(instance()) }
+  bind<SetDao>() with singleton { SetDaoImpl(instance(), instance()) }
   bind() from singleton { Config() }
 
   bind<Jdbi>() with singleton {

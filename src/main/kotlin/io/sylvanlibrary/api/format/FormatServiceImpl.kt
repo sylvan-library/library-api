@@ -3,10 +3,12 @@ package io.sylvanlibrary.api.format
 import io.sylvanlibrary.api.card.Card
 import io.sylvanlibrary.api.set.Set
 import io.sylvanlibrary.api.set.SetDao
+import io.sylvanlibrary.api.util.Config
 import io.sylvanlibrary.api.util.Paths
 import java.util.*
 
 class FormatServiceImpl(
+    private val config: Config,
     private val formatDao: FormatDao,
     private val setDao: SetDao
 ) : FormatService {
@@ -53,6 +55,6 @@ class FormatServiceImpl(
   }
 
   private fun buildCanonicalUrl(name: String): String {
-    return "${Paths.ROOT}/${Paths.Formats.ROOT}/${name.toLowerCase()}"
+    return "${config.host}/${Paths.Formats.ROOT}/${name.toLowerCase()}"
   }
 }
