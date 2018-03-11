@@ -1,6 +1,5 @@
 package io.sylvanlibrary.api.format
 
-import io.sylvanlibrary.api.util.Paths
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
@@ -34,6 +33,4 @@ class FormatDaoImpl(private val connectionPool: Jdbi) : FormatDao {
           .findFirst()
     }
   }
-
-
 }

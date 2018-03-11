@@ -1,6 +1,5 @@
 package io.sylvanlibrary.api.block
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
 data class Block(
