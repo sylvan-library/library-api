@@ -1,4 +1,4 @@
-package io.sylvanlibrary.api.controllers
+package io.sylvanlibrary.api.block
 
 import io.sylvanlibrary.api.entities.Block
 import java.util.Optional
