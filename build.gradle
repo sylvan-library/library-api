@@ -62,6 +62,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.4'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.4'
+    compile 'com.github.salomonbrys.kodein:kodein:4.1.0'
 
     compile 'org.jdbi:jdbi3-bom:3.1.0'
     compile 'org.jdbi:jdbi3-core:3.1.0'
